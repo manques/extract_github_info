@@ -1,0 +1,179 @@
+<!doctype html>
+<html>
+	<head>
+	    <title>Login by github</title>
+
+	        <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+            <style>
+            body{
+            	width:100%;
+            	margin:2%;
+
+            }
+            *{
+            	margin:0px;
+            	padding:0px;
+            }
+            	.items_list{
+            		list-style-type: none;
+            		text-decoration: none;
+            		display:flex;
+            	}
+            	.item{
+            		margin:1%;
+            	}
+
+            	/*card */
+            	.card{
+            		box-shadow: 0px 0px 1px black;
+            		display:none;
+            		width:20%;
+            		min-height:350px;
+            		padding: 0.5%;
+
+            	}
+            	.card:hover{
+            		box-shadow: 0px 0px 10px blue;
+            	}
+            	.header{
+            		width:100%;
+            		height:75%;
+            		position:relative;
+            	}
+
+            		.img{
+	            		width:100%;
+	            		height:100%;
+	            		opacity: 0.9;
+            	   }
+
+            	   .close{
+            	    	position:absolute;
+            	    	right: 10px;
+            	    	top:10px;
+            	    	z-index: 100;
+            	    	opacity: 1.0;
+
+            	    }
+            	.container{
+            		width:90%;
+            		height:15%;
+                    padding:5%;
+
+            	}
+            	.detail{
+            		width:100%;
+            		line-height: 150%;
+
+            	}
+
+            
+            </style>
+	</head>
+	<body>
+		<div>
+		    
+		  	<input id="username" type="text" placeholder="github login">
+
+
+          <button type="submit" onclick="get_match()">Add</button>
+          
+   		</div>
+   		<hr/>
+   		
+   		<script>
+   			function get_match(){
+   				console.log(url);
+   				var value_in;
+   				value_in=document.getElementById("username").value;
+
+	   				var url="https://api.github.com/users/";
+	   				url=url+value_in;
+	   				console.log(url);
+	   				var http_request= new XMLHttpRequest();
+	   				http_request.open("GET",url,true);
+	   				http_request.send();
+	                
+	                
+	   				http_request.onreadystatechange=function(){
+	   					if(http_request.readyState==4 && http_request.status==200){
+	   						
+	   						var obj=JSON.parse(http_request.responseText);
+                            display(obj);
+	   						document.getElementById("username").value="";
+	   					}
+	   				};
+              
+              function display(obj_get){
+               
+                
+               // document.getElementById("card_id").setAttribute('id',count);
+              	document.getElementById("card_id").style.display="block";
+              	document.getElementById("img_get").setAttribute('src',obj_get.avatar_url);
+              	document.getElementById("name_get").innerHTML=obj_get.name;
+              	document.getElementById("location_get").innerHTML=obj_get.location;
+              	document.getElementById("follower_get").innerHTML=obj_get.followers;
+
+                var card_value=document.getElementById("outer").innerHTML;
+                output(card_value);
+                
+              }
+   			}
+        
+        function counter(){
+          var c=1;
+          return c;
+        }
+
+        function output(o_v){
+          var  count;
+            count=counter();
+            count="user"+count;
+            console.log(o_v);
+
+            var child=document.createElement("div");
+            child.id=count;
+
+            var text=document.getElementById("card_id")
+            child.appendChild(text);
+          
+            var parent=document.getElementById("response_card");
+            parent.appendChild(child);
+            console.log(parent);
+                
+        }
+        
+
+   			function close_card(){
+   				document.getElementById("card_id").style.display="none";
+   			}
+   		</script>
+   		<div class="list_out">
+   			<ul class="items_list">
+   				<li class="item">Sort by:</li>
+   				<li class="item"><a href="#">Name <span class="fa fa-caret-down"></span></a></li>
+   				<li class="item"><a href="#">Location</a></li>
+   				<li class="item"><a href="#">Follower</a></li>
+   			</ul>
+   		</div>
+   		
+
+   		
+   		<div id="outer">
+           <div id="card_id" class="card">
+            <div class="header">
+                <div class="close fa fa-close" onclick="close_card()"></div>
+                <img id="img_get" class="img" src="">
+            </div>
+            <div class="container">
+              <div class="name detail"><b id="name_get"></b></div>
+              <div class="location detail">Location:<span id="location_get"></span></div>
+              <div class="followers detail">Follower:<span id="follower_get"></span></div>
+            </div>
+          </div> 
+      </div>
+
+      <div id="response_card"> </div>
+	</body>
+</html>
